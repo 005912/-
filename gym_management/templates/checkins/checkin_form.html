@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>健身打卡 - 大学生健身房预约平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-orange: #FF7A00;
+            --primary-dark: #E06D00;
+            --accent-blue: #007BFF;
+            --success-green: #28A745;
+            --success-light: #4CAF50;
+            --warning-red: #DC3545;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --bg-light: #F5F5F5;
+            --white: #FFFFFF;
+            --border-light: #E0E0E0;
+            --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.12);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--bg-light) 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px;
+        }
+
+        .page-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* 头部区域 */
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .page-title {
+            font-weight: 700;
+            font-size: 28px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 0;
+        }
+
+        .btn-back {
+            background-color: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 12px 20px;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .btn-back:hover {
+            background-color: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+
+        /* 步骤指示器 */
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            position: relative;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary-orange) 0%, var(--border-light) 100%);
+            z-index: 1;
+            border-radius: 2px;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            border: 2px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .step.active .step-circle {
+            background-color: var(--primary-orange);
+            border-color: var(--primary-orange);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .step.completed .step-circle {
+            background-color: var(--success-green);
+            border-color: var(--success-green);
+            color: white;
+        }
+
+        .step.completed .step-circle::after {
+            content: '✓';
+            font-weight: bold;
+        }
+
+        .step-label {
+            font-size: 14px;
+            color: var(--text-light);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .step.active .step-label {
+            color: var(--primary-orange);
+            font-weight: 600;
+        }
+
+        .step.completed .step-label {
+            color: var(--success-green);
+        }
+
+        /* 卡片样式 */
+        .card {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 24px;
+            overflow: hidden;
+            background: var(--white);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-medium);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--white) 0%, var(--bg-light) 100%);
+            border-bottom: 1px solid var(--border-light);
+            padding: 20px 24px;
+        }
+
+        .card-header h5, .card-header h6 {
+            margin: 0;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        /* 表单样式 */
+        .form-section {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 2px solid var(--border-light);
+            padding: 12px 16px;
+            transition: var(--transition);
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .form-control:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.1);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-unit {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 14px;
+            background: white;
+            padding: 0 8px;
+        }
+
+        /* 滑块样式 */
+        .slider-container {
+            margin-top: 15px;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border-light);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-orange);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: var(--primary-dark);
+        }
+
+        /* 按钮样式 */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-dark) 100%);
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 14px 24px;
+            font-weight: 600;
+            transition: var(--transition);
+            color: white;
+            width: 100%;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 16px;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent-blue);
+            color: var(--accent-blue);
+            border-radius: var(--border-radius);
+            padding: 12px 20px;
+            font-weight: 600;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .btn-outline:hover {
+            background: var(--accent-blue);
+            color: white;
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        /* 信息列表 */
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .info-list li {
+            padding: 12px 0;
+            display: flex;
+            align-items: flex-start;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .info-list li:last-child {
+            border-bottom: none;
+        }
+
+        .info-list i {
+            color: var(--primary-orange);
+            margin-right: 12px;
+            margin-top: 2px;
+            font-size: 14px;
+            width: 16px;
+            text-align: center;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h5 {
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+
+        /* 成功状态 */
+        .checkin-success {
+            text-align: center;
+            padding: 40px 20px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .checkin-success i {
+            font-size: 64px;
+            color: var(--success-green);
+            margin-bottom: 20px;
+            animation: bounce 0.6s ease;
+        }
+
+        .checkin-success h4 {
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        /* 提示卡片 */
+        .tips-card {
+            background: linear-gradient(135deg, var(--accent-blue) 0%, #5D8AA8 100%);
+            color: white;
+            border: none;
+        }
+
+        .tips-card .card-body {
+            padding: 20px;
+        }
+
+        .tips-card h6 {
+            color: white;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tips-card p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* 通知条 */
+        .notification-bar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: var(--success-green);
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-medium);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.5s ease;
+            max-width: 90%;
+        }
+
+        .notification-bar.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* 动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .step-indicator {
+                max-width: 100%;
+            }
+
+            .step-label {
+                font-size: 12px;
+            }
+            
+            .card-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- 页面标题和返回按钮 -->
+        <div class="header-section">
+            <h1 class="page-title">
+                <i class="fas fa-dumbbell me-2"></i>健身打卡
+            </h1>
+            <a href="{{ url_for('dashboard') }}" class="btn-back">
+                <i class="fas fa-arrow-left"></i>返回控制台
+            </a>
+        </div>
+
+        <!-- 步骤指示器 -->
+        <div class="step-indicator">
+            <div class="step active">
+                <div class="step-circle">1</div>
+                <div class="step-label">选择时段</div>
+            </div>
+            <div class="step">
+                <div class="step-circle">2</div>
+                <div class="step-label">填写时长</div>
+            </div>
+            <div class="step">
+                <div class="step-circle">3</div>
+                <div class="step-label">完成打卡</div>
+            </div>
+        </div>
+
+        <!-- 通知条 -->
+        <div class="notification-bar" id="notificationBar">
+            <i class="fas fa-check-circle"></i>
+            <span id="notificationText"></span>
+        </div>
+
+        <div class="row">
+            <!-- 打卡表单 -->
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-calendar-check me-2"></i>今日可打卡预约
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- 打卡表单 - 有预约时显示 -->
+                        {% if reservations and reservations|length > 0 %}
+                        <form id="checkin-form">
+                            <div class="form-section">
+                                <label for="reservation_id" class="form-label">
+                                    <i class="fas fa-clock"></i>选择预约时段
+                                </label>
+                                <select class="form-select" id="reservation_id" name="reservation_id" required>
+                                    <option value="">请选择要打卡的时段</option>
+                                    {% for reservation in reservations %}
+                                    <option value="{{ reservation.reservation_id }}">
+                                        {{ reservation.date }} {{ reservation.time_slot }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                                <div class="form-text mt-2" style="color: var(--text-light); font-size: 13px;">
+                                    选择您已预约的健身时段
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <label for="actual_duration" class="form-label">
+                                    <i class="fas fa-hourglass-half"></i>实际健身时长
+                                </label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="actual_duration" name="actual_duration"
+                                           min="0.5" max="2" step="0.1" value="1.0" required>
+                                    <span class="input-unit">小时</span>
+                                </div>
+                                
+                                <!-- 滑块组件 -->
+                                <div class="slider-container">
+                                    <div class="slider-labels">
+                                        <span>0.5小时</span>
+                                        <span>2.0小时</span>
+                                    </div>
+                                    <input type="range" class="slider" id="duration_slider" 
+                                           min="0.5" max="2" step="0.1" value="1.0">
+                                </div>
+                                
+                                <div class="form-text" style="color: var(--text-light); font-size: 13px;">
+                                    拖动或输入0.5-2小时的健身时长
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-primary mt-4" id="submit-btn">
+                                <i class="fas fa-check-circle me-2"></i>提交打卡
+                            </button>
+                        </form>
+                        {% else %}
+                        <!-- 空状态 - 无预约时显示 -->
+                        <div class="empty-state">
+                            <i class="far fa-calendar-times"></i>
+                            <h5>今日没有可打卡的预约</h5>
+                            <p class="mb-4">请先预约今天的健身时段</p>
+                            <a href="{{ url_for('view_slots') }}" class="btn-primary" style="width: auto; display: inline-block; padding: 10px 20px;">
+                                <i class="fas fa-plus me-2"></i>去预约
+                            </a>
+                        </div>
+                        {% endif %}
+
+                        <!-- 打卡成功提示 -->
+                        <div class="checkin-success" id="checkin-success">
+                            <i class="fas fa-check-circle"></i>
+                            <h4>打卡成功！</h4>
+                            <p>您的健身记录已保存</p>
+                            <div class="mt-4" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                                <a href="{{ url_for('my_checkins') }}" class="btn-primary" style="width: auto;">
+                                    查看打卡记录
+                                </a>
+                                <a href="{{ url_for('checkin_form') }}" class="btn-outline">
+                                    继续打卡
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧信息栏 -->
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fas fa-info-circle me-2"></i>打卡说明
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="info-list">
+                            <li>
+                                <i class="fas fa-check"></i>
+                                <span>只能对今日已预约的时段打卡</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-history"></i>
+                                <span>每个时段只能打卡一次</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-running"></i>
+                                <span>健身时长范围：0.5-2小时</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-list-alt"></i>
+                                <span>打卡后可在"打卡记录"中查看</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 健身小贴士 -->
+                <div class="card tips-card">
+                    <div class="card-body">
+                        <h6 class="mb-3">
+                            <i class="fas fa-lightbulb me-2"></i>健身小贴士
+                        </h6>
+                        <p>
+                            <i class="fas fa-dumbbell me-1"></i>
+                            记录您的健身时长有助于追踪运动效果，建议每次健身时间控制在1-1.5小时，以达到最佳效果。
+                        </p>
+                        <p class="mt-2">
+                            <i class="fas fa-heartbeat me-1"></i>
+                            合理安排训练强度，注意热身和拉伸，避免运动损伤。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('checkin-form');
+            const successMessage = document.getElementById('checkin-success');
+            const notificationBar = document.getElementById('notificationBar');
+            const notificationText = document.getElementById('notificationText');
+            const steps = document.querySelectorAll('.step');
+            const reservationSelect = document.getElementById('reservation_id');
+            const durationInput = document.getElementById('actual_duration');
+            const durationSlider = document.getElementById('duration_slider');
+            const submitBtn = document.getElementById('submit-btn');
+
+            // 同步滑块和输入框的值
+            if (durationInput && durationSlider) {
+                durationSlider.addEventListener('input', function() {
+                    durationInput.value = this.value;
+                });
+                
+                durationInput.addEventListener('input', function() {
+                    durationSlider.value = this.value;
+                });
+            }
+
+            // 显示通知函数
+            function showNotification(message, isSuccess = true) {
+                notificationText.textContent = message;
+                notificationBar.style.background = isSuccess ? 
+                    'linear-gradient(135deg, var(--success-green) 0%, var(--success-light) 100%)' : 
+                    'var(--warning-red)';
+                notificationBar.classList.add('show');
+                
+                setTimeout(() => {
+                    notificationBar.classList.remove('show');
+                }, 3000);
+            }
+
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(form);
+
+                    // 显示加载状态
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>提交中...';
+                    submitBtn.disabled = true;
+
+                    try {
+                        const response = await fetch('{{ url_for("checkin") }}', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const data = await response.json();
+
+                        if (data.success) {
+                            // 显示成功通知
+                            showNotification(data.message, true);
+
+                            // 显示成功界面
+                            form.style.display = 'none';
+                            successMessage.style.display = 'block';
+
+                            // 更新步骤指示器
+                            steps[1].classList.add('completed', 'active');
+                            steps[2].classList.add('completed', 'active');
+                        } else {
+                            showNotification(data.message, false);
+                            submitBtn.innerHTML = originalText;
+                            submitBtn.disabled = false;
+                        }
+                    } catch (error) {
+                        console.error('打卡错误:', error);
+                        showNotification('网络错误，请检查连接后重试', false);
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }
+                });
+            }
+
+            // 输入验证
+            if (durationInput) {
+                durationInput.addEventListener('input', function() {
+                    const value = parseFloat(this.value);
+                    if (value < 0.5 || value > 2) {
+                        this.style.borderColor = 'var(--warning-red)';
+                    } else {
+                        this.style.borderColor = 'var(--success-green)';
+                    }
+                });
+            }
+
+            // 选择时段后更新步骤指示器
+            if (reservationSelect) {
+                reservationSelect.addEventListener('change', function() {
+                    if (this.value) {
+                        steps[0].classList.add('completed');
+                        steps[1].classList.add('active');
+                    } else {
+                        steps[0].classList.remove('completed');
+                        steps[1].classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>v

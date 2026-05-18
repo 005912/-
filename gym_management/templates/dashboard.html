@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}控制台 - 大学生健身房预约平台{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>欢迎回来，{{ user_name }}！</h2>
+        <p class="text-muted">这里是您的健身管理中心</p>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">今日预约</h5>
+                        <h2 class="card-text">{{ today_reservations }} 次</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">总打卡次数</h5>
+                        <h2 class="card-text">{{ total_checkins }} 次</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if current_reservations %}
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5>当前有效预约</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    {% for reservation in current_reservations %}
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6>{{ reservation.date }} {{ reservation.time_slot }}</h6>
+                            </div>
+                            <a href="{{ url_for('checkin_form') }}" class="btn btn-sm btn-success">去打卡</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>快速操作</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('view_slots') }}" class="btn btn-primary">预约健身时段</a>
+                    <a href="{{ url_for('checkin_form') }}" class="btn btn-success">健身打卡</a>
+                    <a href="{{ url_for('my_reservations') }}" class="btn btn-outline-primary">查看我的预约</a>
+                    <a href="{{ url_for('my_checkins') }}" class="btn btn-outline-success">查看打卡记录</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 仅用于演示的数据初始化 -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6>演示功能</h6>
+            </div>
+            <div class="card-body">
+                <p class="small text-muted">初始化示例数据（仅测试使用）</p>
+                <a href="{{ url_for('init_sample_data') }}" class="btn btn-sm btn-warning">初始化示例数据</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

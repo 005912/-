@@ -1,0 +1,513 @@
+{% extends "base.html" %}
+
+{% block title %}我的预约 - 大学生健身房预约平台{% endblock %}
+
+{% block styles %}
+<style>
+:root {
+    --primary-color: #FF7F50;
+    --primary-dark: #FF6347;
+    --secondary-color: #E8F4F8;
+    --text-dark: #333;
+    --text-light: #666;
+    --border-radius: 12px;
+    --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    --transition: all 0.3s ease;
+}
+
+body {
+    background: linear-gradient(135deg, #FF7F50 0%, #E8F4F8 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-dark);
+    padding: 20px;
+}
+
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 20px 0;
+}
+
+.page-title {
+    font-weight: 700;
+    font-size: 28px;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+.btn-outline {
+    background-color: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    border-radius: var(--border-radius);
+    padding: 10px 20px;
+    transition: var(--transition);
+}
+
+.btn-outline:hover {
+    background-color: rgba(255,255,255,0.3);
+    transform: translateY(-2px);
+}
+
+.btn-danger {
+    background-color: #F44336;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 14px;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background-color: #d32f2f;
+    transform: translateY(-2px);
+}
+
+.btn-danger:active {
+    transform: scale(0.98);
+}
+
+.btn-danger:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.card {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    margin-bottom: 24px;
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background-color: white;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 16px 24px;
+}
+
+.card-header h5 {
+    margin: 0;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.card-body {
+    padding: 24px;
+}
+
+.table-responsive {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    background-color: var(--secondary-color);
+    border: none;
+    padding: 16px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.table tbody td {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+}
+
+.table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.badge {
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.badge-success {
+    background-color: #4CAF50;
+}
+
+.badge-secondary {
+    background-color: #9E9E9E;
+}
+
+.badge-warning {
+    background-color: #FF9800;
+}
+
+.badge-primary {
+    background-color: #2196F3;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-state i {
+    font-size: 64px;
+    color: #ddd;
+    margin-bottom: 20px;
+}
+
+.empty-state h5 {
+    color: var(--text-light);
+    margin-bottom: 16px;
+}
+
+.empty-state p {
+    color: var(--text-light);
+    margin-bottom: 24px;
+}
+
+.filter-section {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.filter-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.filter-btn:hover:not(.active) {
+    background-color: #f5f5f5;
+}
+
+.reservation-card {
+    border: 1px solid #e0e0e0;
+    border-radius: var(--border-radius);
+    padding: 16px;
+    margin-bottom: 16px;
+    transition: var(--transition);
+}
+
+.reservation-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-3px);
+}
+
+.reservation-card.upcoming {
+    border-left: 4px solid var(--primary-color);
+}
+
+.reservation-card.completed {
+    border-left: 4px solid #4CAF50;
+}
+
+.reservation-card.cancelled {
+    border-left: 4px solid #F44336;
+}
+
+@media (max-width: 768px) {
+    .header-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-buttons {
+        margin-top: 15px;
+        width: 100%;
+        display: flex;
+        gap: 10px;
+    }
+
+    .header-buttons .btn {
+        flex: 1;
+    }
+
+    .table-responsive {
+        font-size: 14px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <!-- 页面标题和操作按钮 -->
+    <div class="header-section">
+        <h1 class="page-title">我的预约记录</h1>
+        <div class="header-buttons">
+            <a href="{{ url_for('view_slots') }}" class="btn btn-primary">
+                <i class="fas fa-plus-circle me-2"></i>预约新时段
+            </a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline">
+                <i class="fas fa-arrow-left me-2"></i>返回控制台
+            </a>
+        </div>
+    </div>
+
+    <!-- 预约记录卡片 -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>所有预约</h5>
+        </div>
+        <div class="card-body">
+            {% if reservations %}
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>时段</th>
+                            <th>预约时间</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reservation in reservations %}
+                        <tr class="reservation-row" data-status="{{ reservation.status }}" data-date="{{ reservation.date }}">
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-calendar-day text-primary me-2"></i>
+                                    {{ reservation.date }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-clock text-info me-2"></i>
+                                    {{ reservation.time_slot }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-calendar-plus text-secondary me-2"></i>
+                                    {% if reservation.created_time %}
+                                        {{ reservation.created_time.strftime('%Y-%m-%d %H:%M') }}
+                                    {% else %}
+                                        未知
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                {% if reservation.status == '已预约' %}
+                                    <span class="badge badge-success">
+                                        <i class="fas fa-check-circle me-1"></i>已预约
+                                    </span>
+                                {% elif reservation.status == '已取消' %}
+                                    <span class="badge badge-secondary">
+                                        <i class="fas fa-times-circle me-1"></i>已取消
+                                    </span>
+                                {% elif reservation.status == '已完成' %}
+                                    <span class="badge badge-primary">
+                                        <i class="fas fa-running me-1"></i>已完成
+                                    </span>
+                                {% else %}
+                                    <span class="badge badge-warning">
+                                        <i class="fas fa-question-circle me-1"></i>{{ reservation.status }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if reservation.status == '已预约' %}
+                                    <button class="btn btn-sm btn-danger cancel-btn"
+                                            data-reservation-id="{{ reservation.reservation_id }}"
+                                            type="button">
+                                        <i class="fas fa-times me-1"></i>取消预约
+                                    </button>
+                                {% else %}
+                                    <button class="btn btn-sm btn-secondary" disabled>
+                                        <i class="fas fa-ban me-1"></i>
+                                        {% if reservation.status == '已取消' %}已取消
+                                        {% elif reservation.status == '已完成' %}已结束
+                                        {% else %}{{ reservation.status }}{% endif %}
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-calendar-times"></i>
+                <h5>暂无预约记录</h5>
+                <p>您还没有任何预约记录，快去预约健身时段吧！</p>
+                <a href="{{ url_for('view_slots') }}" class="btn btn-primary">
+                    <i class="fas fa-plus-circle me-2"></i>立即预约
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// 取消预约函数
+function cancelReservation(reservationId, button) {
+    console.log('开始取消预约，ID:', reservationId);
+
+    if (!confirm('确定要取消这个预约吗？取消后该时段将释放给其他用户。')) {
+        return;
+    }
+
+    // 禁用按钮防止重复点击
+    button.disabled = true;
+    const originalHTML = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>取消中...';
+
+    // 发送取消请求
+    fetch(`/cancel_reservation/${reservationId}`, {
+        method: 'POST'
+    })
+    .then(response => {
+        console.log('响应状态:', response.status);
+        return response.json();
+    })
+    .then(data => {
+        console.log('取消预约响应:', data);
+        if (data.success) {
+            alert('取消预约成功！');
+            location.reload();
+        } else {
+            alert('取消预约失败：' + (data.message || '未知错误'));
+            button.disabled = false;
+            button.innerHTML = originalHTML;
+        }
+    })
+    .catch(error => {
+        console.error('取消预约错误:', error);
+        alert('取消预约失败，请检查网络连接后重试');
+        button.disabled = false;
+        button.innerHTML = originalHTML;
+    });
+}
+
+// 筛选预约记录
+function filterReservations(filter) {
+    const rows = document.querySelectorAll('.reservation-row');
+    const today = new Date().toISOString().split('T')[0];
+
+    rows.forEach(row => {
+        const status = row.getAttribute('data-status');
+        const date = row.getAttribute('data-date');
+
+        let show = false;
+
+        switch(filter) {
+            case 'all':
+                show = true;
+                break;
+            case 'today':
+                show = date === today;
+                break;
+            case 'upcoming':
+                show = status === '已预约' && date >= today;
+                break;
+            case 'completed':
+                show = status === '已完成';
+                break;
+            case 'cancelled':
+                show = status === '已取消';
+                break;
+            default:
+                show = true;
+        }
+
+        row.style.display = show ? '' : 'none';
+    });
+}
+
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('页面加载完成，初始化取消预约功能...');
+
+    // 绑定取消按钮点击事件
+    document.querySelectorAll('.cancel-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const reservationId = this.getAttribute('data-reservation-id');
+            console.log('取消预约按钮被点击，ID:', reservationId);
+
+            if (reservationId) {
+                cancelReservation(reservationId, this);
+            }
+        });
+    });
+
+    // 绑定筛选按钮点击事件
+    document.querySelectorAll('.filter-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            this.classList.add('active');
+            const filter = this.getAttribute('data-filter');
+            filterReservations(filter);
+        });
+    });
+
+    // 调试信息
+    const cancelButtons = document.querySelectorAll('.cancel-btn');
+    console.log('找到取消预约按钮数量:', cancelButtons.length);
+
+    // 添加表格行点击效果
+    document.querySelectorAll('tbody tr').forEach(row => {
+        row.addEventListener('click', function() {
+            this.style.backgroundColor = '#f0f8ff';
+            setTimeout(() => {
+                this.style.backgroundColor = '';
+            }, 300);
+        });
+    });
+});
+</script>
+{% endblock %}

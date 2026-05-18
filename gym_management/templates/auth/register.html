@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册 - 大学生健身房预约平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-orange: #FF7A00;
+            --primary-dark: #E06D00;
+            --accent-blue: #007BFF;
+            --success-green: #28A745;
+            --warning-red: #DC3545;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --bg-light: #F8F9FA;
+            --white: #FFFFFF;
+            --border-light: #E0E0E0;
+            --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* 注册容器 */
+        .register-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(255, 122, 0, 0.05) 0%, var(--bg-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        /* 背景装饰元素 */
+        .bg-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-orange) 0%, rgba(255, 122, 0, 0.1) 100%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .circle-1 {
+            width: 180px;
+            height: 180px;
+            top: 15%;
+            left: 8%;
+            animation-delay: 0s;
+        }
+
+        .circle-2 {
+            width: 120px;
+            height: 120px;
+            bottom: 25%;
+            right: 12%;
+            animation-delay: 2s;
+        }
+
+        .circle-3 {
+            width: 90px;
+            height: 90px;
+            top: 65%;
+            left: 85%;
+            animation-delay: 4s;
+        }
+
+        /* 运动元素纹理 */
+        .sport-texture {
+            position: absolute;
+            opacity: 0.03;
+            font-size: 120px;
+            z-index: 0;
+        }
+
+        .texture-1 {
+            top: 20%;
+            left: 10%;
+            transform: rotate(-15deg);
+        }
+
+        .texture-2 {
+            bottom: 15%;
+            right: 8%;
+            transform: rotate(15deg);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-15px) scale(1.05); }
+        }
+
+        /* 注册包装器 */
+        .register-wrapper {
+            display: flex;
+            width: 1000px;
+            max-width: 100%;
+            height: auto;
+            min-height: 650px;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow-medium);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 品牌展示区 */
+        .brand-section {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 50px 40px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .brand-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .brand-content {
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logo i {
+            font-size: 2.2rem;
+            margin-right: 12px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--white);
+        }
+
+        .slogan {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .slogan h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .slogan p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .benefits {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .benefit-item i {
+            font-size: 1.3rem;
+            margin-top: 3px;
+            opacity: 0.9;
+        }
+
+        .benefit-item h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0 0 4px 0;
+        }
+
+        .benefit-item p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* 表单区域 */
+        .form-section {
+            flex: 1;
+            padding: 50px 40px;
+            display: flex;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 380px;
+            margin: 0 auto;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .form-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 0 0 8px 0;
+        }
+
+        .form-header p {
+            color: var(--text-light);
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        /* 表单样式 - 两列布局 */
+        .register-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            justify-self: end;
+        }
+
+        .form-label i {
+            color: var(--primary-orange);
+            font-size: 0.9rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px 45px 12px 12px;
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: var(--bg-light);
+            position: relative;
+        }
+
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.1);
+        }
+
+        /* 底部下划线动画 */
+        .input-wrapper::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-orange);
+            transition: width 0.3s ease;
+        }
+
+        .input-wrapper:focus-within::after {
+            width: 100%;
+        }
+
+        .input-wrapper input:valid {
+            border-color: var(--success-green);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+
+        .input-hint {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 5px;
+            grid-column: 2;
+        }
+
+        /* 密码强度指示器 */
+        .password-strength {
+            margin-top: 8px;
+            grid-column: 2;
+        }
+
+        .strength-bar {
+            height: 6px;
+            background: var(--border-light);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        [data-strength="0"] { width: 0%; background: var(--border-light); }
+        [data-strength="1"] { width: 33%; background: var(--warning-red); }
+        [data-strength="2"] { width: 66%; background: #FFC107; }
+        [data-strength="3"] { width: 100%; background: var(--success-green); }
+
+        .strength-text {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* 密码匹配提示 */
+        .password-match {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            margin-top: 6px;
+            font-size: 0.8rem;
+            color: var(--success-green);
+            grid-column: 2;
+        }
+
+        .password-mismatch {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            margin-top: 6px;
+            font-size: 0.8rem;
+            color: var(--warning-red);
+            grid-column: 2;
+        }
+
+        .password-match i, .password-mismatch i {
+            font-size: 0.9rem;
+        }
+
+        /* 表单选项 */
+        .form-options {
+            margin: 10px 0;
+            grid-column: 1 / span 2;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .checkbox-wrapper input {
+            display: none;
+        }
+
+        .checkmark {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border-light);
+            border-radius: 4px;
+            position: relative;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .checkbox-wrapper input:checked + .checkmark {
+            background: var(--primary-orange);
+            border-color: var(--primary-orange);
+        }
+
+        .checkbox-wrapper input:checked + .checkmark::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 12px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .checkbox-label {
+            color: var(--text-dark);
+            line-height: 1.4;
+        }
+
+        .terms-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .terms-link:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* 注册按钮 */
+        .register-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+            grid-column: 1 / span 2;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .register-btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .btn-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 分隔线 */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+            grid-column: 1 / span 2;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-light);
+        }
+
+        .divider span {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        /* 登录提示 */
+        .login-prompt {
+            text-align: center;
+            margin-top: 10px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            grid-column: 1 / span 2;
+        }
+
+        .login-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border: 2px solid var(--accent-blue);
+            color: var(--accent-blue);
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .login-link:hover {
+            background: var(--accent-blue);
+            color: var(--white);
+            transform: translateY(-1px);
+            text-decoration: none;
+        }
+
+        /* 底部版权信息 */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-light);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-light);
+            margin-top: 20px;
+            grid-column: 1 / span 2;
+        }
+
+        /* 消息提示 */
+        .flash-message {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            grid-column: 1 / span 2;
+            text-align: center;
+        }
+
+        .flash-error {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--warning-red);
+            border: 1px solid var(--warning-red);
+        }
+
+        .flash-success {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-green);
+            border: 1px solid var(--success-green);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .register-wrapper {
+                flex-direction: column;
+                height: auto;
+                margin: 20px;
+                max-height: 90vh;
+            }
+
+            .brand-section {
+                padding: 30px 20px;
+            }
+
+            .form-section {
+                padding: 30px 20px;
+            }
+
+            .bg-circle {
+                display: none;
+            }
+
+            .form-group {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .form-label {
+                justify-self: start;
+            }
+
+            .input-hint,
+            .password-strength,
+            .password-match,
+            .password-mismatch {
+                grid-column: 1;
+            }
+
+            .form-options,
+            .register-btn,
+            .divider,
+            .login-prompt,
+            .footer,
+            .flash-message {
+                grid-column: 1;
+            }
+        }
+
+        /* 表单验证样式 */
+        .input-wrapper input:invalid:not(:focus):not(:placeholder-shown) {
+            border-color: var(--warning-red);
+        }
+
+        .input-wrapper input:valid:not(:focus):not(:placeholder-shown) {
+            border-color: var(--success-green);
+        }
+
+        /* 成功消息样式 */
+        .success-message {
+            display: none;
+            background: var(--success-green);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            grid-column: 1 / span 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <!-- 背景装饰元素 -->
+        <div class="bg-elements">
+            <div class="bg-circle circle-1"></div>
+            <div class="bg-circle circle-2"></div>
+            <div class="bg-circle circle-3"></div>
+        </div>
+
+        <!-- 运动元素纹理 -->
+        <div class="sport-texture texture-1">
+            <i class="fas fa-dumbbell"></i>
+        </div>
+        <div class="sport-texture texture-2">
+            <i class="fas fa-running"></i>
+        </div>
+
+        <div class="register-wrapper">
+            <!-- 左侧品牌展示区 -->
+            <div class="brand-section">
+                <div class="brand-content">
+                    <div class="logo">
+                        <i class="fas fa-dumbbell"></i>
+                        <h1>健身房预约平台</h1>
+                    </div>
+                    <div class="slogan">
+                        <h2>加入健身大家庭</h2>
+                        <p>开启科学健身 · 记录每一次进步 · 遇见更好的自己</p>
+                    </div>
+                    <div class="benefits">
+                        <div class="benefit-item">
+                            <i class="fas fa-calendar-check"></i>
+                            <div>
+                                <h4>灵活预约</h4>
+                                <p>自由选择适合的健身时段</p>
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-chart-bar"></i>
+                            <div>
+                                <h4>进度追踪</h4>
+                                <p>详细记录你的健身成果</p>
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-users"></i>
+                            <div>
+                                <h4>社区互动</h4>
+                                <p>与同学们一起坚持锻炼</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧注册表单区 -->
+            <div class="form-section">
+                <div class="form-container">
+                    <div class="form-header">
+                        <h2>创建账户</h2>
+                        <p>填写基本信息，开启健身之旅</p>
+                    </div>
+
+                    <form class="register-form" id="registerForm" method="POST">
+                        <!-- 消息提示区域 -->
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <div class="flash-message flash-{{ category }}">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        <!-- 成功消息 -->
+                        <div class="success-message" id="successMessage">
+                            <i class="fas fa-check-circle"></i> 注册成功！正在跳转到登录页面...
+                        </div>
+
+                        <div class="form-group">
+                            <label for="student_no" class="form-label">
+                                <i class="fas fa-id-card"></i>
+                                学号
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="text"
+                                       id="student_no"
+                                       name="student_no"
+                                       placeholder="请输入您的学号"
+                                       required
+                                       autofocus>
+                                <i class="fas fa-user-graduate input-icon"></i>
+                            </div>
+                            <div class="input-hint">请输入有效的学生证号</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name" class="form-label">
+                                <i class="fas fa-user"></i>
+                                姓名
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="text"
+                                       id="name"
+                                       name="name"
+                                       placeholder="请输入您的真实姓名"
+                                       required>
+                                <i class="fas fa-signature input-icon"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="college" class="form-label">
+                                <i class="fas fa-graduation-cap"></i>
+                                学院
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="text"
+                                       id="college"
+                                       name="college"
+                                       placeholder="请输入您所在的学院"
+                                       required>
+                                <i class="fas fa-university input-icon"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock"></i>
+                                密码
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="password"
+                                       id="password"
+                                       name="password"
+                                       placeholder="请设置登录密码"
+                                       required
+                                       minlength="6">
+                                <i class="fas fa-key input-icon"></i>
+                                <button type="button" class="password-toggle" data-target="password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="password-strength">
+                                <div class="strength-bar">
+                                    <div class="strength-fill" data-strength="0"></div>
+                                </div>
+                                <span class="strength-text">密码强度：弱</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirm_password" class="form-label">
+                                <i class="fas fa-lock"></i>
+                                确认密码
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="password"
+                                       id="confirm_password"
+                                       name="confirm_password"
+                                       placeholder="请再次输入密码"
+                                       required>
+                                <i class="fas fa-key input-icon"></i>
+                                <button type="button" class="password-toggle" data-target="confirm_password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="password-match">
+                                <i class="fas fa-check-circle"></i>
+                                <span>密码匹配</span>
+                            </div>
+                            <div class="password-mismatch">
+                                <i class="fas fa-times-circle"></i>
+                                <span>密码不匹配</span>
+                            </div>
+                        </div>
+
+                        <div class="form-options">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" id="agreeTerms" required>
+                                <span class="checkmark"></span>
+                                <span class="checkbox-label">
+                                    我已阅读并同意
+                                    <a href="#" class="terms-link">服务条款</a>
+                                    和
+                                    <a href="#" class="terms-link">隐私政策</a>
+                                </span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="register-btn" id="registerBtn">
+                            <span class="btn-text">立即注册</span>
+                            <div class="btn-loader" style="display: none;"></div>
+                        </button>
+                    </form>
+
+                    <div class="divider">
+                        <span>或</span>
+                    </div>
+
+                    <div class="login-prompt">
+                        <p>已有账户？</p>
+                        <a href="login.html" class="login-link">
+                            <i class="fas fa-sign-in-alt"></i>
+                            立即登录
+                        </a>
+                    </div>
+
+                    <div class="footer">
+                        <p>© 2023 大学生健身房预约平台 | 服务热线: 400-123-4567</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 密码显示/隐藏功能
+            const passwordToggles = document.querySelectorAll('.password-toggle');
+
+            passwordToggles.forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const passwordInput = document.getElementById(targetId);
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+
+                    const icon = this.querySelector('i');
+                    icon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+                });
+            });
+
+            // 密码强度检测
+            const passwordInput = document.getElementById('password');
+            const strengthFill = document.querySelector('.strength-fill');
+            const strengthText = document.querySelector('.strength-text');
+
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 0;
+
+                if (password.length >= 6) strength++;
+                if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+                if (password.match(/\d/) || password.match(/[^a-zA-Z\d]/)) strength++;
+
+                strengthFill.setAttribute('data-strength', strength);
+
+                const strengthLabels = ['弱', '中', '强'];
+                strengthText.textContent = `密码强度：${strengthLabels[strength] || '弱'}`;
+                checkPasswordMatch(); // 密码变化时重新检查匹配
+            });
+
+            // 密码匹配检测
+            const confirmPasswordInput = document.getElementById('confirm_password');
+            const passwordMatch = document.querySelector('.password-match');
+            const passwordMismatch = document.querySelector('.password-mismatch');
+
+            confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+
+            function checkPasswordMatch() {
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+
+                if (confirmPassword === '') {
+                    passwordMatch.style.display = 'none';
+                    passwordMismatch.style.display = 'none';
+                } else if (password === confirmPassword) {
+                    passwordMatch.style.display = 'flex';
+                    passwordMismatch.style.display = 'none';
+                } else {
+                    passwordMatch.style.display = 'none';
+                    passwordMismatch.style.display = 'flex';
+                }
+            }
+
+            // 表单提交处理
+            const registerForm = document.getElementById('registerForm');
+            const registerBtn = document.getElementById('registerBtn');
+            const btnText = registerBtn.querySelector('.btn-text');
+            const btnLoader = registerBtn.querySelector('.btn-loader');
+            const successMessage = document.getElementById('successMessage');
+
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // 前端验证密码匹配
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                if (password !== confirmPassword) {
+                    passwordMismatch.style.display = 'flex';
+                    return;
+                }
+
+                // 显示加载状态
+                btnText.style.display = 'none';
+                btnLoader.style.display = 'block';
+                registerBtn.disabled = true;
+
+                // 收集表单数据
+                const formData = new FormData(registerForm);
+
+                // 发送注册请求
+                fetch('/register', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    // 检查是否重定向（注册成功）
+                    if (response.redirected) {
+                        // 显示成功消息并跳转
+                        successMessage.style.display = 'block';
+                        setTimeout(() => {
+                            window.location.href = response.url;
+                        }, 3000);
+                        return;
+                    }
+                    // 处理错误响应
+                    return response.text().then(html => {
+                        // 重新加载页面内容以显示错误消息
+                        document.querySelector('.form-container').innerHTML = new DOMParser()
+                            .parseFromString(html, 'text/html')
+                            .querySelector('.form-container').innerHTML;
+                        // 恢复按钮状态
+                        resetButton();
+                    });
+                })
+                .catch(error => {
+                    console.error('注册请求失败:', error);
+                    alert('注册失败，请稍后重试');
+                    resetButton();
+                });
+            });
+
+            // 重置按钮状态
+            function resetButton() {
+                btnText.style.display = 'inline';
+                btnLoader.style.display = 'none';
+                registerBtn.disabled = false;
+            }
+
+            // 实时表单验证
+            const inputs = document.querySelectorAll('input[required]');
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    this.classList.add('validated');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

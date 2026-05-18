@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}预约时段 - 大学生健身房预约平台{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>健身房时段预约</h2>
+    <div>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">返回控制台</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">选择日期</h5>
+    </div>
+    <div class="card-body">
+        <div class="d-flex gap-2 flex-wrap">
+            {% for date in dates %}
+            <a href="{{ url_for('view_slots', date=date.date) }}" 
+               class="btn {% if date.date == selected_date %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                {{ date.display }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0">{{ selected_date }} 可用时段</h5>
+    </div>
+    <div class="card-body">
+        {% if slots %}
+        <div class="row">
+            {% for slot in slots %}
+            <div class="col-md-6 mb-3">
+                <div class="card {% if slot.remaining_capacity > 0 %}border-success{% else %}border-danger{% endif %}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ slot.time_slot }}</h5>
+                        <p class="card-text">
+                            容量: {{ slot.booked_count }}/{{ slot.total_capacity }}<br>
+                            剩余: {{ slot.remaining_capacity }} 个名额
+                        </p>
+                        {% if slot.user_has_reserved %}
+                        <button class="btn btn-success w-100" disabled>已预约</button>
+                        {% elif slot.remaining_capacity > 0 %}
+                        <form method="POST" action="{{ url_for('reserve_slot', slot_id=slot.slot_id) }}" class="reserve-form">
+                            <button type="submit" class="btn btn-primary w-100">立即预约</button>
+                        </form>
+                        {% else %}
+                        <button class="btn btn-secondary w-100" disabled>已满额</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-4">
+            <p class="text-muted">该日期暂无可用时段</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const forms = document.querySelectorAll('.reserve-form');
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (confirm('确定要预约这个时段吗？')) {
+                fetch(this.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.success) {
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    alert('预约失败，请重试');
+                });
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}
