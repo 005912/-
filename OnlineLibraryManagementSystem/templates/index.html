@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>在线图书管理系统</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { text-align: center; }
+        #auth-section, #book-section { margin: 20px auto; max-width: 600px; }
+        input { margin: 5px 0; padding: 5px; width: 100%; box-sizing: border-box; }
+        button { padding: 5px 10px; margin: 5px 0; }
+        ul { list-style: none; padding: 0; }
+        li { padding: 8px; margin: 5px 0; background: #f4f4f4; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .hidden { display: none; }
+        .message { margin: 10px 0; color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>在线图书管理系统</h1>
+
+    <!-- 注册/登录 -->
+    <div id="auth-section">
+        <h2>注册</h2>
+        <input type="text" id="reg-username" placeholder="用户名">
+        <input type="password" id="reg-password" placeholder="密码">
+        <button onclick="register()">注册</button>
+
+        <h2>登录</h2>
+        <input type="text" id="login-username" placeholder="用户名">
+        <input type="password" id="login-password" placeholder="密码">
+        <button onclick="login()">登录</button>
+
+        <p id="auth-message" class="message"></p>
+    </div>
+
+    <!-- 图书管理 -->
+    <div id="book-section" class="hidden">
+        <div style="display:flex; justify-content: space-between; align-items: center;">
+            <h2>图书列表</h2>
+            <button onclick="logout()">登出</button>
+        </div>
+
+        <input type="text" id="search" placeholder="搜索书名或作者" oninput="filterBooks()">
+
+        <ul id="book-list"></ul>
+
+        <!-- 添加图书（管理员可见） -->
+        <div id="add-book-form">
+            <h3>添加图书（管理员）</h3>
+            <input type="text" id="title" placeholder="书名">
+            <input type="text" id="author" placeholder="作者">
+            <input type="number" id="year" placeholder="出版年份">
+            <button onclick="addBook()">添加</button>
+            <p id="book-message" class="message"></p>
+        </div>
+    </div>
+
+    <script src="/static/main.js"></script>
+</body>
+</html>
